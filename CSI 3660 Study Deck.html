@@ -1,0 +1,834 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>CSI 3660 Study Deck</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: left rail of courses > chapters > sections, one reading column, mode tabs (Notes / Cheat sheet / Flashcards / Quiz) per chapter */
+:root {
+  --bg: #eef2f5;
+  --surface: #ffffff;
+  --rail: #e3e9ee;
+  --ink: #16202b;
+  --muted: #5a6877;
+  --line: #cfd8e0;
+  --accent: #2552c9;
+  --accent-ink: #ffffff;
+  --mark: #9eeaf5;
+  --term-bg: #1a2230;
+  --term-fg: #d7e2ee;
+  --term-prompt: #7fd3e3;
+  --term-dim: #8b9bb0;
+  --term-cmd: #ffffff;
+  --good: #1d7a4a;
+  --good-bg: #dff3e7;
+  --bad: #b23a2e;
+  --bad-bg: #fbe4e1;
+  --warn-bg: #fff4d6;
+  --warn-line: #d9a514;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161d; --surface: #18202a; --rail: #141b23; --ink: #e2e8ef; --muted: #93a2b3;
+    --line: #2a3542; --accent: #7d9eff; --accent-ink: #0d1420; --mark: #1f5964;
+    --term-bg: #0b0f15; --term-fg: #d7e2ee; --term-prompt: #7fd3e3; --term-dim: #7d8ca0;
+    --good: #6fd39c; --good-bg: #173326; --bad: #ff8f80; --bad-bg: #3a1e1b;
+    --warn-bg: #2e2714; --warn-line: #c99a1e; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11161d; --surface: #18202a; --rail: #141b23; --ink: #e2e8ef; --muted: #93a2b3;
+  --line: #2a3542; --accent: #7d9eff; --accent-ink: #0d1420; --mark: #1f5964;
+  --term-bg: #0b0f15; --term-fg: #d7e2ee; --term-prompt: #7fd3e3; --term-dim: #7d8ca0;
+  --good: #6fd39c; --good-bg: #173326; --bad: #ff8f80; --bad-bg: #3a1e1b;
+  --warn-bg: #2e2714; --warn-line: #c99a1e; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--rail); }
+a { color: var(--accent); }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+code, .mono { font-family: var(--f-mono); font-size: 0.88em; }
+:not(pre) > code { background: var(--rail); border: 1px solid var(--line); padding: 0.05em 0.35em; border-radius: 4px; white-space: nowrap; }
+strong { font-weight: 700; }
+mark { background: var(--mark); color: inherit; padding: 0 0.15em; border-radius: 2px; }
+
+.app { display: grid; grid-template-columns: 280px minmax(0, 1fr); min-height: 100%; }
+
+/* ---------- rail ---------- */
+.rail {
+  background: var(--rail); border-right: 1px solid var(--line);
+  position: sticky; top: env(safe-area-inset-top, 0px); height: calc(100vh - env(safe-area-inset-top, 0px));
+  overflow-y: auto; padding-block: 20px 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 16px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.brand { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rail-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.hide-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid var(--line); background: var(--surface); border-radius: 6px; color: var(--muted); }
+.hide-btn:hover { color: var(--ink); border-color: var(--muted); }
+.hide-btn svg, .show-ico { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+#menuBtn { display: inline-flex; align-items: center; gap: 6px; }
+@media (min-width: 881px) {
+  .app.collapsed { grid-template-columns: minmax(0, 1fr); }
+  .app.collapsed .rail { display: none; }
+  .app.collapsed .topbar { display: flex; align-items: center; gap: 10px; }
+}
+.brand .perm { font-family: var(--f-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.02em; }
+.brand .perm b { color: var(--accent); font-weight: 600; }
+.brand h1 { font-family: var(--f-display); font-weight: 800; font-size: 22px; line-height: 1.15; margin: 0; letter-spacing: -0.01em; }
+.search { position: relative; }
+.search input {
+  width: 100%; font: inherit; font-size: 14px; padding: 8px 10px 8px 30px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink);
+}
+.search svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; stroke: var(--muted); fill: none; }
+.course-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 700; margin: 0 0 6px; }
+.chap-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.chap-btn {
+  width: 100%; text-align: left; background: none; border: 0; padding: 7px 10px; border-radius: 6px;
+  display: grid; grid-template-columns: 38px 1fr; gap: 6px; align-items: baseline; font-size: 15px;
+}
+.chap-btn .num { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.chap-btn:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.chap-btn[aria-current="true"] { background: var(--surface); box-shadow: 0 0 0 1px var(--line); font-weight: 700; }
+.chap-btn[aria-current="true"] .num { color: var(--accent); }
+.sec-list { list-style: none; margin: 4px 0 8px 44px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: flex; flex-direction: column; }
+.sec-list a { display: block; font-size: 13.5px; color: var(--muted); text-decoration: none; padding: 3px 0; line-height: 1.35; }
+.sec-list a:hover { color: var(--ink); }
+.rail-foot { margin-top: auto; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+
+/* ---------- main ---------- */
+.main { min-width: 0; padding-block: 28px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.col { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+.topbar { display: none; }
+
+.chap-head { display: flex; flex-direction: column; gap: 10px; }
+.eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 700; }
+.chap-head h2 { font-family: var(--f-display); font-weight: 800; font-size: clamp(34px, 6vw, 52px); line-height: 1.02; letter-spacing: -0.025em; margin: 0; text-wrap: balance; }
+.lsline {
+  font-family: var(--f-mono); font-size: 13px; color: var(--muted); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; overflow-x: auto; white-space: nowrap;
+}
+.lsline .t { color: var(--accent); font-weight: 600; outline: 1.5px solid var(--accent); border-radius: 50%; padding: 0 3px; }
+.stats { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--muted); }
+.stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 5; padding-top: 6px; overflow-x: auto; }
+.tab {
+  background: none; border: 0; padding: 10px 14px; font-weight: 700; font-size: 15px; color: var(--muted);
+  border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap;
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* ---------- notes ---------- */
+.section { display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 64px; padding-top: 8px; }
+.section + .section { border-top: 1px solid var(--line); padding-top: 28px; }
+.section h3 { font-family: var(--f-display); font-weight: 700; font-size: 25px; line-height: 1.2; margin: 0; letter-spacing: -0.01em; text-wrap: balance; display: flex; gap: 10px; align-items: baseline; }
+.section h3 .sn { font-family: var(--f-mono); font-size: 13px; font-weight: 400; color: var(--muted); }
+.section p { margin: 0; max-width: 68ch; }
+.section ul { margin: 0; padding-left: 1.25em; display: flex; flex-direction: column; gap: 6px; max-width: 68ch; }
+.section ul ul { margin-top: 6px; }
+.section li::marker { color: var(--muted); }
+.section ol { margin: 0; padding-left: 1.6em; display: flex; flex-direction: column; gap: 3px; }
+.section ol li::marker { font-family: var(--f-mono); font-size: 13px; color: var(--accent); }
+
+.def { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: baseline; }
+.def .tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--accent); }
+.def .term { font-weight: 700; }
+.def .body { grid-column: 1 / -1; }
+
+.note { border-left: 3px solid var(--warn-line); background: var(--warn-bg); padding: 10px 14px; border-radius: 0 6px 6px 0; max-width: 68ch; }
+.note.tip { border-left-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
+.note .lbl { font-weight: 700; margin-right: 6px; }
+
+.term { margin: 0; }
+pre.term {
+  background: var(--term-bg); color: var(--term-fg); font-family: var(--f-mono); font-size: 13.5px; line-height: 1.55;
+  padding: 14px 16px; border-radius: 8px; overflow-x: auto; margin: 0;
+}
+pre.term .p { color: var(--term-prompt); user-select: none; }
+pre.term .c { font-weight: 600; color: var(--term-cmd); }
+pre.term .o { color: var(--term-dim); }
+.cap { font-size: 14px; color: var(--muted); margin-top: -6px; }
+
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: var(--rail); }
+tr:last-child td { border-bottom: 0; }
+td.k { font-family: var(--f-mono); font-size: 14px; white-space: nowrap; font-weight: 600; }
+
+/* ---------- cheat sheet ---------- */
+.cheat-filter { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: 13.5px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.cheat { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 10px; }
+.cmd { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.cmd code { font-family: var(--f-mono); font-size: 14px; font-weight: 600; color: var(--accent); overflow-wrap: anywhere; }
+.cmd span { font-size: 14.5px; }
+
+/* ---------- flashcards ---------- */
+.fc-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.fc-meta { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 7px 14px; font-weight: 700; font-size: 14px; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.good { background: var(--good-bg); color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, transparent); }
+.btn.bad { background: var(--bad-bg); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.progress { height: 6px; background: var(--rail); border-radius: 3px; overflow: hidden; border: 1px solid var(--line); }
+.progress > i { display: block; height: 100%; background: var(--good); width: 0; transition: width .25s; }
+
+.card-stage { perspective: 1400px; }
+.card {
+  position: relative; width: 100%; min-height: 280px; border: 0; padding: 0; background: none; text-align: left;
+  transform-style: preserve-3d; transition: transform .45s cubic-bezier(.3,.7,.3,1);
+}
+.card.flipped { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 28px 28px 44px;
+  display: flex; flex-direction: column; justify-content: center; gap: 12px;
+  box-shadow: 0 1px 0 var(--line), 0 10px 30px -18px rgba(10, 20, 40, .35);
+}
+.face.back { transform: rotateY(180deg); }
+.face .side { position: absolute; top: 14px; left: 18px; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 700; }
+.face .hint { position: absolute; bottom: 14px; right: 18px; font-size: 12px; color: var(--muted); }
+.face .q { font-family: var(--f-display); font-size: clamp(21px, 3.4vw, 28px); font-weight: 700; line-height: 1.25; text-wrap: balance; }
+.face .a { font-size: 18px; line-height: 1.55; }
+.face .a ul { margin: 0; padding-left: 1.2em; }
+.known-pill { font-size: 12px; font-weight: 700; color: var(--good); background: var(--good-bg); border-radius: 999px; padding: 2px 10px; }
+
+/* ---------- quiz ---------- */
+.quiz { display: flex; flex-direction: column; gap: 16px; }
+.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+.qcard .qn { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.qcard .qt { font-weight: 700; font-size: 17px; }
+.opts { display: flex; flex-direction: column; gap: 6px; }
+.opt { text-align: left; border: 1px solid var(--line); background: var(--bg); border-radius: 6px; padding: 9px 12px; display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: baseline; }
+.opt .l { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; }
+.opt.right { background: var(--good-bg); border-color: var(--good); }
+.opt.right .l { color: var(--good); }
+.opt.wrong { background: var(--bad-bg); border-color: var(--bad); }
+.opt.wrong .l { color: var(--bad); }
+.explain { font-size: 15px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; }
+.explain b { color: var(--ink); }
+.score { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; }
+.score .big { font-family: var(--f-display); font-weight: 800; font-size: 30px; font-variant-numeric: tabular-nums; }
+
+/* ---------- search results ---------- */
+.results { display: flex; flex-direction: column; gap: 8px; }
+.result { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px; }
+.result:hover { border-color: var(--accent); }
+.result .w { font-size: 12px; color: var(--muted); font-family: var(--f-mono); }
+.result .s { font-size: 14.5px; }
+.empty { color: var(--muted); }
+
+/* ---------- small screens ---------- */
+@media (max-width: 880px) {
+  .app { grid-template-columns: 1fr; }
+  .rail {
+    position: fixed; inset: 0 auto 0 0; width: min(86vw, 320px); height: 100%; z-index: 40;
+    padding-top: calc(20px + env(safe-area-inset-top, 0px)); transform: translateX(-102%); transition: transform .25s;
+    box-shadow: 0 0 40px rgba(0,0,0,.25);
+  }
+  .rail.open { transform: none; }
+  .scrim { position: fixed; inset: 0; background: rgba(8, 12, 18, .45); z-index: 35; }
+  .topbar { display: flex; align-items: center; gap: 10px; }
+  .topbar .t { font-family: var(--f-display); font-weight: 700; font-size: 16px; }
+  .main { padding-top: 14px; }
+  .face { padding: 26px 20px 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card, .rail, .progress > i { transition: none; }
+}
+</style>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="Chapters">
+    <div class="rail-top">
+      <div class="brand">
+        <span class="perm"><b>d</b>rwxr-xr-x&nbsp; notes/</span>
+        <h1>CSI 3660 Study Deck</h1>
+      </div>
+      <button class="hide-btn" id="hideBtn" aria-label="Hide sidebar" title="Hide sidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M16 9l-3 3 3 3"/></svg></button>
+    </div>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search all notes" autocomplete="off">
+    </label>
+    <nav id="nav"></nav>
+    <div class="rail-foot">Flashcard progress is saved in this browser only.</div>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <main class="main">
+    <div class="col">
+      <div class="topbar">
+        <button class="btn" id="menuBtn" aria-controls="rail" aria-expanded="false" title="Show sidebar"><svg class="show-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M13 9l3 3-3 3"/></svg>Chapters</button>
+        <span class="t" id="topTitle"></span>
+      </div>
+      <div id="view"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* =====================================================================
+   CHAPTER DATA
+   To add a chapter or lecture, append an object to CHAPTERS:
+   {
+     id: "ch06",                         // used in the link: #ch06, #ch06-quiz
+     course: "CSI 3660 · System Administration",
+     num: "06",  title: "Access Control",  source: "Lecture notes",
+     sections: [ { title: "...", blocks: [ ...see block types... ] } ],
+     cheats:    [ { cmd: "chmod 755 f", does: "...", tag: "Permissions" } ],
+     cards:     [ { q: "front", a: "back" } ],
+     quiz:      [ { q: "question", options: ["a","b","c","d"], answer: 0, why: "..." } ]
+   }
+   Block types:
+     { t:"p", text }                      paragraph
+     { t:"list", items:[ "text" | ["text", [subitems...]] ] }
+     { t:"olist", items:[...] }           numbered list
+     { t:"def", term, text, tag? }        definition box
+     { t:"note", text, kind:"warn"|"tip" }
+     { t:"term", lines:["$ cmd", "output"], cap? }   terminal; "$ " lines are commands
+     { t:"table", head:[...], rows:[[...]], key:true? }  key = first column monospace
+   Inline: `code`  **bold**
+   ===================================================================== */
+const CHAPTERS = [
+{
+  id: "ch05",
+  course: "CSI 3660 · System Administration",
+  num: "05",
+  title: "The Filesystem",
+  source: "Chapter 5 notes",
+  sections: [
+    { title: "What a filesystem is", blocks: [
+      { t:"p", text:"Which of these would you expect to find in a filesystem: processes, audio devices, kernel data structures and tuning parameters, interprocess communication channels? On UNIX or Linux the answer is **all of the above, and more**." },
+      { t:"def", tag:"Purpose", term:"Filesystem", text:"Represents and organizes the system's storage resources." },
+      { t:"p", text:"A filesystem has four main components:" },
+      { t:"table", head:["Component","What it is"], rows:[
+        ["Namespace","A way to name things and organize them in a hierarchy"],
+        ["API","A set of system calls for navigating and manipulating objects"],
+        ["Security model","Schemes for protecting, hiding, and sharing things"],
+        ["Implementation","Software that ties the logical model to the hardware"]
+      ]},
+      { t:"list", items:[
+        "Some parts of the file tree are handled by traditional disk-based implementations.",
+        ["Others are handled by separate drivers inside the kernel.", [
+          "Example: network filesystems use a driver that forwards requested operations to a server on another computer."
+        ]]
+      ]},
+      { t:"def", tag:"Definition", term:"Device files", text:"Give programs a way to communicate with drivers inside the kernel. They aren't really data files, but they're handled through the filesystem and their characteristics are stored on disk." },
+      { t:"list", items:[
+        ["The kernel supports more than one type of disk-based filesystem. Predominant standards:", [
+          "**ext4**, **XFS**, and **UFS**",
+          "Oracle's **ZFS** and **Btrfs**"
+        ]]
+      ]}
+    ]},
+    { title: "Mounting and unmounting", blocks: [
+      { t:"list", items:[
+        "The file tree is composed of smaller filesystems, each consisting of one directory plus its subdirectories and files.",
+        "Some filesystems live on disk partitions or on logical volumes backed by physical disks.",
+        "Most kernels have a **loop** filesystem that lets you mount individual files as if they were distinct devices. This lets you duplicate, move, or hide portions of the file tree."
+      ]},
+      { t:"def", tag:"Definition", term:"Mount point", text:"Filesystems are attached to the tree with `mount`. It maps a directory in the existing tree (the **mount point**) to the root of the newly attached filesystem. The mount point's previous contents become temporarily inaccessible, so mount points are usually empty directories." },
+      { t:"list", items:[ "On some systems, `mount` is just a wrapper that calls filesystem-specific commands." ]},
+      { t:"def", tag:"Config file", term:"/etc/fstab", text:"Lists the filesystems normally mounted on the system. It lets filesystems be checked automatically with `fsck` and mounted at boot time. It also documents the disk layout and enables short commands (e.g. `mount /usr` instead of the full device spec)." },
+      { t:"table", key:true, head:["Command","Behavior"], rows:[
+        ["umount","Detaches a filesystem. Complains if it's in use: no open files, running programs, or processes may be using it."],
+        ["umount -l","Lazy unmount. Removes the filesystem from the naming hierarchy now, but doesn't truly unmount it until every existing file reference is closed."],
+        ["umount -f","Force-unmounts a busy filesystem."]
+      ]},
+      { t:"note", kind:"warn", text:"`umount -f` is almost always a bad idea on anything other than NFS mounts." }
+    ]},
+    { title: "Finding what keeps a filesystem busy", blocks: [
+      { t:"p", text:"When a filesystem you're trying to unmount is busy, run `fuser` to find out which processes are holding it. `fuser -c mountpoint` prints the PID of every process using a file or directory on that filesystem, followed by a letter code." },
+      { t:"term", lines:["freebsd$ fuser -c /usr/home","/usr/home:  15897c  87787c  67124x  11201x  11199x  11198x  972x"] },
+      { t:"table", key:true, head:["Code","Meaning"], rows:[
+        ["c","The process has its current working directory on the filesystem"],
+        ["x","The process is executing a program from the filesystem"],
+        ["m","The process has a file or shared library mapped in memory (seen in `-v` output)"]
+      ]},
+      { t:"p", text:"To investigate the offending processes, pass the PIDs to `ps`:" },
+      { t:"term", lines:["nutrient:~$ ps up \"87787 11201\"","USER    PID  %CPU %MEM STARTED     TIME COMMAND","fnd   11201   0.0  0.2 14Jul16  2:32.49 ruby: slave_audiochannelbackend","fnd   87787   0.0  0.0 Thu07PM  0:00.93 -bash (bash)"] },
+      { t:"p", text:"Or skip `ps` and add `-v` to `fuser` for a more readable display that includes the command names:" },
+      { t:"term", lines:["$ fuser -cv /usr","          USER   PID  ACCESS  COMMAND","   /usr   root   444   ....m  atd","          root   499   ....m  sshd","          root   520   ....m  lpd"] },
+      { t:"note", kind:"tip", text:"`lsof` is a more elaborate alternative to `fuser`." }
+    ]},
+    { title: "Organization of the file tree", blocks: [
+      { t:"table", key:true, head:["Path","What lives there"], rows:[
+        ["/boot","The OS kernel file"],
+        ["/etc","Critical system and configuration files"],
+        ["/bin, /sbin","Important utilities"],
+        ["/tmp","Temporary files"],
+        ["/lib, /lib64, /usr/lib","Shared library files and other oddments"],
+        ["/usr","Standard but not system-critical items, such as online manuals and most libraries"],
+        ["/var","Spool directories, log files, accounting information, and other items"]
+      ]},
+      { t:"note", kind:"warn", text:"Both `/usr` and `/var` must be available for the system to run in **multiuser mode**." },
+      { t:"list", items:[
+        ["Large disks and more sophisticated filesystem implementations have reduced the need for disk partitions.", [ "The trend is toward one big root filesystem." ]],
+        ["Where partitioning is still used, it's mainly to keep one part of the tree from consuming all available space and bringing the whole system to a halt.", [
+          "The most commonly partitioned filesystems: `/var`, `/tmp`, and user home directories."
+        ]]
+      ]}
+    ]},
+    { title: "File types", blocks: [
+      { t:"p", text:"Filesystem implementations define **7 types** of files:" },
+      { t:"table", key:true, head:["Symbol","File type","Created by","Removed by"], rows:[
+        ["-","Regular file","editors, `cp`, etc.","`rm`"],
+        ["d","Directory","`mkdir`","`rmdir`, `rm -r`"],
+        ["c","Character device file","`mknod`","`rm`"],
+        ["b","Block device file","`mknod`","`rm`"],
+        ["s","Local domain socket","`socket` system call","`rm`"],
+        ["p","Named pipe (FIFO)","`mknod`","`rm`"],
+        ["l","Symbolic link","`ln -s`","`rm`"]
+      ]},
+      { t:"p", text:"Determine a file's type with the `file` command:" },
+      { t:"term", lines:["$ file /usr/include","/usr/include: directory","$ file /bin/sh","/bin/sh: ELF 64-bit LSB executable, x86-64, version 1 (FreeBSD),","    dynamically linked, interpreter /libexec/ld-elf.so.1, for FreeBSD 11.0","    (1100122), FreeBSD-style, stripped"], cap:"The ELF executable output tells you /bin/sh is an executable command." },
+      { t:"p", text:"Or use `ls -ld`. `-l` shows detailed information; `-d` shows the directory itself instead of its contents. The **first character** of the output is the type symbol." },
+      { t:"term", lines:["$ ls -ld /usr/include","drwxr-xr-x  27 root  root  4096 Jul 15 20:57 /usr/include"], cap:"The leading d means /usr/include is a directory." }
+    ]},
+    { title: "Deleting awkwardly named files", blocks: [
+      { t:"p", text:"How do you `rm` a file named `-f`? `rm` would read it as a flag. Two fixes:" },
+      { t:"list", items:[
+        "Use a pathname: `rm ./-f`",
+        "Use `--` to tell `rm` that everything after it is a filename, not an option: `rm -- -f`"
+      ]},
+      { t:"p", text:"For names containing Unicode or control characters, use shell globbing (pattern matching) to identify them, and add `-i` so `rm` confirms each deletion. That protects against deleting anything important." },
+      { t:"term", lines:["$ ls","foo?bar     foose    kde-root","$ rm -i foo*","rm: remove 'foo\\004bar'? y","rm: remove 'foose'? n"] },
+      { t:"list", items:[
+        "`ls -b` shows control characters as octal numbers.",
+        "`rm -i *` interactively deletes horribly named files."
+      ]}
+    ]},
+    { title: "Hard links", blocks: [
+      { t:"list", items:[
+        "A file's name is stored in its parent directory, not with the file itself.",
+        "More than one directory entry can refer to the same file at once, even under different names. These additional references are **links** (or **hard links**).",
+        ["This creates the illusion of the file existing in more than one place.", [
+          "All links to the file are equivalent as far as the filesystem is concerned.",
+          "The filesystem keeps a **link count** for each file.",
+          "The file's data blocks aren't released until its last link is deleted.",
+          "Hard links **cannot cross filesystem boundaries**."
+        ]],
+        "Create with `ln`, remove with `rm`.",
+        "`ls -l` shows how many links a file has (the number after the mode)."
+      ]}
+    ]},
+    { title: "Character and block device files", blocks: [
+      { t:"list", items:[
+        "Device drivers present a standard communication interface.",
+        "The filesystem handles a request on a device file by passing it to the appropriate device driver."
+      ]},
+      { t:"note", kind:"tip", text:"Distinguish **device files** from **device drivers**. Device files are the rendezvous point for communicating with drivers. They are not drivers themselves." },
+      { t:"table", head:["Number","Tells…"], rows:[
+        ["Major device number","The **kernel** which driver the file refers to"],
+        ["Minor device number","The **driver** which physical unit to address. Drivers interpret the minor numbers passed to them."]
+      ]}
+    ]},
+    { title: "Local domain sockets and named pipes", blocks: [
+      { t:"def", tag:"Type s", term:"Local domain socket", text:"A connection between processes that lets them communicate hygienically. Accessible only from the local host, and referred to through a filesystem object instead of a network port. Created with the `socket` system call; removed with `rm` or the `unlink` system call." },
+      { t:"def", tag:"Type p", term:"Named pipe (FIFO)", text:"Lets two processes on the same host communicate. FIFO = first in, first out. Created with `mknod`, removed with `rm`." },
+      { t:"list", items:[
+        "Named pipes and local domain sockets serve similar purposes.",
+        "Network sockets could stand in for both."
+      ]}
+    ]},
+    { title: "Symbolic links", blocks: [
+      { t:"list", items:[
+        "Points to a file **by name**.",
+        "When the kernel hits a symbolic link while looking up a pathname, it redirects to the pathname stored as the link's contents.",
+        "Symbolic links are distinct from the files they point to.",
+        ["Can contain arbitrary absolute or relative paths.", [
+          "So they can refer to files on other filesystems, or to files that don't exist."
+        ]],
+        "Create with `ln -s`, remove with `rm`."
+      ]},
+      { t:"table", head:["","Hard link","Symbolic link"], rows:[
+        ["Reference type","Direct reference","Reference by name"],
+        ["Crosses filesystems?","No","Yes"],
+        ["Can point to a missing file?","No","Yes"],
+        ["ls -l type symbol","- (same as the file)","l"],
+        ["Create / remove","`ln` / `rm`","`ln -s` / `rm`"]
+      ]},
+      { t:"term", lines:["$ sudo ln -s archived/secure /var/data/secure","$ ls -l /var/data/secure","lrwxrwxrwx 1 root root 18 Aug 3 12:54 /var/data/secure -> archived/secure"], cap:"Creates the link /var/data/secure with the relative target archived/secure, which resolves to /var/data/archived/secure." }
+    ]},
+    { title: "setuid, setgid, and the sticky bit", blocks: [
+      { t:"table", key:true, head:["Octal","Bit","Effect"], rows:[
+        ["4000","setuid","Lets a program access files and processes that would otherwise be off limits to the user running it"],
+        ["2000","setgid","Same idea, for group. **On a directory:** new files take the directory's group ownership instead of the creator's default group, which makes sharing a directory among users easier."],
+        ["1000","sticky bit","**On a directory:** you can't delete or rename a file unless you own the directory, own the file, or are the superuser. Modern systems silently ignore it on regular files."]
+      ]},
+      { t:"note", kind:"tip", text:"The sticky bit is what makes shared directories like `/tmp` a little more private and secure." }
+    ]},
+    { title: "ls: list and inspect files", blocks: [
+      { t:"p", text:"Sysadmins care most about: link count, owner, group, mode, size, last access time, last modification time, and type. Inspect all of them with `ls -l`, or `ls -ld` for a directory itself (without `-d`, `ls` lists the directory's contents)." },
+      { t:"def", tag:"Definition", term:"Inode number", text:"An integer associated with a file's contents. Directory entries are pointers to inodes. Show it with `ls -li`." },
+      { t:"table", key:true, head:["Flag","Does"], rows:[
+        ["-a","Show all entries, including hidden ones"],
+        ["-t","Sort by modification time"],
+        ["-F","Mark names so directories and executables are distinguishable"],
+        ["-R","List recursively"],
+        ["-h","Human-readable file sizes"],
+        ["-i","Show inode numbers"],
+        ["-b","Show control characters as octal"],
+        ["-d","Show the directory itself, not its contents"]
+      ]}
+    ]}
+  ],
+  cheats: [
+    { tag:"Mounting", cmd:"mount", does:"Attach a filesystem at a mount point" },
+    { tag:"Mounting", cmd:"umount", does:"Detach a filesystem (fails if busy)" },
+    { tag:"Mounting", cmd:"umount -l", does:"Lazy: detach from tree now, finish when references close" },
+    { tag:"Mounting", cmd:"umount -f", does:"Force unmount. Bad idea except on NFS" },
+    { tag:"Mounting", cmd:"/etc/fstab", does:"Filesystems mounted (and fsck'd) at boot" },
+    { tag:"Mounting", cmd:"fsck", does:"Check a filesystem" },
+    { tag:"Busy FS", cmd:"fuser -c /mnt", does:"PIDs using the filesystem (c = cwd, x = executing)" },
+    { tag:"Busy FS", cmd:"fuser -cv /mnt", does:"Same, with user and command names" },
+    { tag:"Busy FS", cmd:"ps up \"PID PID\"", does:"Inspect specific processes" },
+    { tag:"Busy FS", cmd:"lsof", does:"More elaborate alternative to fuser" },
+    { tag:"Files", cmd:"file path", does:"Identify a file's type" },
+    { tag:"Files", cmd:"ls -ld dir", does:"Details on the directory itself; first char = type" },
+    { tag:"Files", cmd:"ls -li", does:"Show inode numbers" },
+    { tag:"Files", cmd:"ls -b", does:"Show control characters as octal" },
+    { tag:"Files", cmd:"rm ./-f  or  rm -- -f", does:"Delete a file whose name looks like a flag" },
+    { tag:"Files", cmd:"rm -i foo*", does:"Glob + confirm each deletion" },
+    { tag:"Links", cmd:"ln target link", does:"Create a hard link" },
+    { tag:"Links", cmd:"ln -s target link", does:"Create a symbolic link" },
+    { tag:"Special files", cmd:"mknod", does:"Create char/block device files and named pipes" },
+    { tag:"Special files", cmd:"socket() / unlink()", does:"Create / remove a local domain socket" },
+    { tag:"Bits", cmd:"4000", does:"setuid" },
+    { tag:"Bits", cmd:"2000", does:"setgid (dir: new files inherit dir's group)" },
+    { tag:"Bits", cmd:"1000", does:"sticky (dir: only owners/root may delete or rename)" }
+  ],
+  cards: [
+    { q:"What is the basic purpose of a filesystem?", a:"To represent and organize the system's storage resources." },
+    { q:"Name the four main components of a filesystem.", a:"Namespace, API (system calls), security models, and implementation." },
+    { q:"What are device files?", a:"A way for programs to communicate with drivers inside the kernel. Handled through the filesystem; characteristics stored on disk, but not really data files." },
+    { q:"Name five predominant disk-based filesystem types.", a:"ext4, XFS, UFS, ZFS (Oracle), Btrfs." },
+    { q:"What does the loop filesystem let you do?", a:"Mount individual files as if they were distinct devices, to duplicate, move, or hide parts of the file tree." },
+    { q:"What is a mount point, and what happens to its old contents?", a:"The directory in the existing tree that `mount` maps to the root of the new filesystem. Its previous contents become temporarily inaccessible." },
+    { q:"What is /etc/fstab for?", a:"Lists filesystems normally mounted, so they can be fsck'd and mounted at boot. Also documents disk layout and enables short mount commands." },
+    { q:"umount -l vs umount -f?", a:"`-l` (lazy) removes it from the hierarchy now but waits for references to close. `-f` forces a busy unmount, almost always a bad idea except on NFS." },
+    { q:"Which command finds the processes keeping a filesystem busy?", a:"`fuser -c mountpoint` (add `-v` for readable output). `lsof` is a more elaborate alternative." },
+    { q:"In fuser output, what do c and x mean?", a:"c = process's current working directory is on the filesystem. x = process is executing a program from it." },
+    { q:"Which two directories must be available for multiuser mode?", a:"/usr and /var." },
+    { q:"Which filesystems are most commonly put on separate partitions, and why?", a:"/var, /tmp, and user home directories, so one part of the tree can't fill the disk and halt the system." },
+    { q:"List the 7 file types and their ls symbols.", a:"Regular (-), directory (d), character device (c), block device (b), local domain socket (s), named pipe (p), symbolic link (l)." },
+    { q:"How do you delete a file named -f?", a:"`rm ./-f` or `rm -- -f`." },
+    { q:"Safe way to delete files with control characters in their names?", a:"Glob for them with `rm -i` so each deletion is confirmed. `ls -b` shows the characters as octal." },
+    { q:"Where is a file's name actually stored?", a:"In its parent directory." },
+    { q:"When are a file's data blocks released?", a:"When its last hard link is deleted (link count reaches 0)." },
+    { q:"Can a hard link cross filesystem boundaries?", a:"No. A symbolic link can." },
+    { q:"Major vs minor device number?", a:"Major tells the kernel which driver. Minor tells the driver which physical unit to address." },
+    { q:"Are device files the same as device drivers?", a:"No. Device files are the rendezvous point for communicating with drivers, not the drivers themselves." },
+    { q:"How are local domain sockets created and removed?", a:"Created with the `socket` system call; removed with `rm` or `unlink`." },
+    { q:"How are named pipes created? What's their other name?", a:"With `mknod`; also called FIFOs (first in, first out)." },
+    { q:"Hard link vs symbolic link in one line?", a:"A hard link is a direct reference; a symbolic link is a reference by name." },
+    { q:"Octal values of setuid, setgid, and the sticky bit?", a:"setuid 4000, setgid 2000, sticky 1000." },
+    { q:"What does setgid do on a directory?", a:"New files inherit the directory's group instead of the creator's default group, making shared directories easier." },
+    { q:"What does the sticky bit do on a directory?", a:"Files can only be deleted or renamed by the directory owner, the file owner, or root. Used on /tmp." },
+    { q:"What is an inode number and how do you see it?", a:"An integer associated with a file's contents; directory entries point to it. `ls -li`." }
+  ],
+  quiz: [
+    { q:"Which is NOT one of the four main components of a filesystem?", options:["Namespace","Process scheduler","Security model","Implementation"], answer:1, why:"The four are namespace, API, security models, and implementation." },
+    { q:"The first character of `ls -l` output is `l`. What is the file?", options:["A hard link","A local domain socket","A symbolic link","A log file"], answer:2, why:"`l` = symbolic link. Sockets are `s`; hard links show the type of the file they point to." },
+    { q:"Which command removes a filesystem from the hierarchy now but waits for open references to close before truly unmounting?", options:["umount -f","umount -l","fuser -c","mount -r"], answer:1, why:"`-l` is the lazy unmount." },
+    { q:"`fuser -c /usr/home` prints `87787c`. What does that tell you?", options:["Process 87787 is executing a program from /usr/home","Process 87787 has its current working directory in /usr/home","Process 87787 crashed","87787 files are open"], answer:1, why:"`c` = current working directory; `x` = executing a program." },
+    { q:"How can you delete a file literally named `-f`?", options:["rm -f","rm \"-f\"","rm -- -f","rm -i -f"], answer:2, why:"`--` ends option parsing. Quoting doesn't help because the shell strips the quotes. `./-f` also works." },
+    { q:"Which statement about hard links is true?", options:["They can point to files on other filesystems","They can point to nonexistent files","They cannot cross filesystem boundaries","Removing one deletes the file's data immediately"], answer:2, why:"Data blocks are freed only when the last link is gone, and hard links stay within one filesystem." },
+    { q:"What does the major device number tell?", options:["The driver which physical unit to use","The kernel which driver the file refers to","The file's inode","The size of the device"], answer:1, why:"Major → which driver (for the kernel). Minor → which unit (for the driver)." },
+    { q:"Which bit has octal value 1000?", options:["setuid","setgid","sticky","execute"], answer:2, why:"setuid 4000, setgid 2000, sticky 1000." },
+    { q:"setgid on a directory causes…", options:["Files to run as the directory owner","New files to take the directory's group ownership","Only root to delete files","The directory to be hidden"], answer:1, why:"Makes shared directories easier to manage among several users." },
+    { q:"Named pipes are created with:", options:["mkfifo only","socket","mknod","ln -p"], answer:2, why:"The notes list `mknod` for named pipes and device files." },
+    { q:"Which two directories must be available for multiuser mode?", options:["/tmp and /home","/usr and /var","/etc and /boot","/bin and /lib"], answer:1, why:"Both /usr and /var are required." },
+    { q:"Which file lets filesystems be checked with fsck and mounted automatically at boot?", options:["/etc/mtab","/etc/fstab","/boot/grub.cfg","/etc/passwd"], answer:1, why:"/etc/fstab also documents the disk layout." },
+    { q:"`ls -li` adds what to the listing?", options:["Link targets","Inode numbers","Hidden files","Human-readable sizes"], answer:1, why:"`-i` shows inode numbers." },
+    { q:"A symbolic link differs from a hard link because it:", options:["Is a direct reference to the inode","Can't be removed with rm","Is a reference by name and can point to a nonexistent file","Increases the target's link count"], answer:2, why:"Symlinks store a pathname, so they can dangle or cross filesystems." },
+    { q:"The most commonly partitioned filesystems are:", options:["/boot, /etc, /bin","/var, /tmp, and user directories","/usr and /lib","/dev and /proc"], answer:1, why:"Partitioning them stops one area from filling the disk and halting the system." }
+  ]
+}
+];
+
+/* ===================================================================== */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+const plain = s => String(s).replace(/[`*]/g, "");
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+const MODES = [["notes","Notes"],["cheat","Cheat sheet"],["cards","Flashcards"],["quiz","Quiz"]];
+let state = { ch: CHAPTERS[0].id, mode: "notes", search: "" };
+const fc = {}; // per-chapter flashcard session
+const qz = {}; // per-chapter quiz answers
+
+function chap(id) { return CHAPTERS.find(c => c.id === id) || CHAPTERS[0]; }
+function slug(c, i) { return c.id + "-s" + (i + 1); }
+
+/* ---------- nav ---------- */
+function renderNav() {
+  const courses = {};
+  CHAPTERS.forEach(c => (courses[c.course] = courses[c.course] || []).push(c));
+  let h = "";
+  for (const [course, list] of Object.entries(courses)) {
+    h += `<p class="course-label">${esc(course)}</p><ul class="chap-list">`;
+    for (const c of list) {
+      const cur = c.id === state.ch;
+      h += `<li><button class="chap-btn" data-ch="${c.id}" aria-current="${cur}"><span class="num">Ch ${esc(c.num)}</span><span>${esc(c.title)}</span></button>`;
+      if (cur && state.mode === "notes" && !state.search) {
+        h += `<ul class="sec-list">` + c.sections.map((s, i) => `<li><a href="#${slug(c,i)}" data-sec="${slug(c,i)}">${esc(s.title)}</a></li>`).join("") + `</ul>`;
+      }
+      h += `</li>`;
+    }
+    h += `</ul>`;
+  }
+  $("#nav").innerHTML = h;
+}
+
+/* ---------- blocks ---------- */
+function listHTML(items, tag="ul") {
+  return `<${tag}>` + items.map(it => Array.isArray(it)
+    ? `<li>${fmt(it[0])}${listHTML(it[1])}</li>` : `<li>${fmt(it)}</li>`).join("") + `</${tag}>`;
+}
+function block(b) {
+  switch (b.t) {
+    case "p": return `<p>${fmt(b.text)}</p>`;
+    case "list": return listHTML(b.items);
+    case "olist": return listHTML(b.items, "ol");
+    case "def": return `<div class="def"><span class="tag">${esc(b.tag || "Term")}</span><span class="term">${fmt(b.term)}</span><div class="body">${fmt(b.text)}</div></div>`;
+    case "note": return `<div class="note ${b.kind === "tip" ? "tip" : ""}"><span class="lbl">${b.kind === "tip" ? "Tip" : "Watch out"}</span>${fmt(b.text)}</div>`;
+    case "term": {
+      const lines = b.lines.map(l => {
+        if (/^\S*\$ /.test(l)) { const i = l.indexOf("$ ") + 2; return `<span class="p">${esc(l.slice(0, i))}</span><span class="c">${esc(l.slice(i))}</span>`; }
+        return `<span class="o">${esc(l)}</span>`;
+      }).join("\n");
+      return `<pre class="term">${lines}</pre>` + (b.cap ? `<p class="cap">${fmt(b.cap)}</p>` : "");
+    }
+    case "table": return `<div class="tbl-wrap"><table><thead><tr>${b.head.map(x => `<th>${esc(x)}</th>`).join("")}</tr></thead><tbody>` +
+      b.rows.map(r => `<tr>${r.map((x, i) => `<td${b.key && i === 0 ? ' class="k"' : ""}>${fmt(x)}</td>`).join("")}</tr>`).join("") + `</tbody></table></div>`;
+  }
+  return "";
+}
+
+/* ---------- views ---------- */
+function header(c) {
+  return `<header class="chap-head">
+    <span class="eyebrow">${esc(c.course)} · Chapter ${esc(c.num)}</span>
+    <h2>${esc(c.title)}</h2>
+    <div class="lsline"><span class="t">d</span>rwxr-xr-x&nbsp; ${c.sections.length} sections&nbsp; ${c.cards.length} cards&nbsp; ${c.quiz.length} questions&nbsp; ${esc(c.source || "")}</div>
+  </header>
+  <div class="tabs" role="tablist">${MODES.map(([k, l]) => `<button class="tab" role="tab" data-mode="${k}" aria-selected="${state.mode === k}">${l}</button>`).join("")}</div>`;
+}
+function notesView(c) {
+  return c.sections.map((s, i) => `<section class="section" id="${slug(c,i)}"><h3><span class="sn">${String(i + 1).padStart(2, "0")}</span>${esc(s.title)}</h3>${s.blocks.map(block).join("")}</section>`).join("");
+}
+let cheatTag = "All";
+function cheatView(c) {
+  const tags = ["All", ...new Set(c.cheats.map(x => x.tag))];
+  if (!tags.includes(cheatTag)) cheatTag = "All";
+  const items = c.cheats.filter(x => cheatTag === "All" || x.tag === cheatTag);
+  return `<div class="cheat-filter">${tags.map(t => `<button class="chip" data-tag="${esc(t)}" aria-pressed="${t === cheatTag}">${esc(t)}</button>`).join("")}</div>
+    <div class="cheat">${items.map(x => `<div class="cmd"><code>${esc(x.cmd)}</code><span>${fmt(x.does)}</span></div>`).join("")}</div>`;
+}
+
+/* flashcards */
+function fcSession(c, reset) {
+  const known = store.get("known-" + c.id, []);
+  if (!fc[c.id] || reset) {
+    const order = c.cards.map((_, i) => i);
+    fc[c.id] = { order, pos: 0, flipped: false, onlyUnknown: fc[c.id]?.onlyUnknown || false };
+  }
+  const s = fc[c.id];
+  s.known = new Set(known);
+  return s;
+}
+function deck(c, s) { return s.onlyUnknown ? s.order.filter(i => !s.known.has(i)) : s.order; }
+function cardsView(c) {
+  const s = fcSession(c);
+  const d = deck(c, s);
+  const pct = Math.round(s.known.size / c.cards.length * 100);
+  let body;
+  if (!d.length) {
+    body = `<div class="qcard"><div class="qt">You've marked every card as known.</div><div class="btn-row"><button class="btn primary" data-act="reset-known">Reset progress</button><button class="btn" data-act="toggle-unknown">Show all cards</button></div></div>`;
+  } else {
+    if (s.pos >= d.length) s.pos = 0;
+    const idx = d[s.pos], card = c.cards[idx];
+    body = `<div class="card-stage"><button class="card ${s.flipped ? "flipped" : ""}" id="card" aria-label="Flip card">
+        <div class="face front"><span class="side">Question</span><div class="q">${fmt(card.q)}</div><span class="hint">Click or press Space to flip</span></div>
+        <div class="face back"><span class="side">Answer</span><div class="a">${fmt(card.a)}</div>${s.known.has(idx) ? '<span class="hint"><span class="known-pill">Known</span></span>' : ""}</div>
+      </button></div>
+      <div class="fc-bar">
+        <div class="btn-row"><button class="btn" data-act="prev" aria-label="Previous card">←</button><button class="btn" data-act="next" aria-label="Next card">→</button></div>
+        <div class="btn-row"><button class="btn bad" data-act="again">Still learning</button><button class="btn good" data-act="know">Got it</button></div>
+      </div>`;
+  }
+  return `<div class="fc-bar"><span class="fc-meta">${d.length ? `Card ${Math.min(s.pos + 1, d.length)} of ${d.length}` : "Deck complete"} · ${s.known.size}/${c.cards.length} known</span>
+      <div class="btn-row"><button class="btn" data-act="shuffle">Shuffle</button><button class="btn" data-act="toggle-unknown" aria-pressed="${s.onlyUnknown}">${s.onlyUnknown ? "Showing: still learning" : "Showing: all cards"}</button></div></div>
+    <div class="progress" aria-hidden="true"><i style="width:${pct}%"></i></div>${body}`;
+}
+
+/* quiz */
+function quizView(c) {
+  const a = qz[c.id] = qz[c.id] || {};
+  const done = Object.keys(a).length, right = Object.entries(a).filter(([i, v]) => c.quiz[i].answer === v).length;
+  const L = "ABCDEFG";
+  const qs = c.quiz.map((q, i) => {
+    const pick = a[i], answered = pick !== undefined;
+    return `<div class="qcard"><span class="qn">Q${i + 1}</span><div class="qt">${fmt(q.q)}</div><div class="opts">` +
+      q.options.map((o, j) => {
+        let cls = "";
+        if (answered && j === q.answer) cls = "right"; else if (answered && j === pick) cls = "wrong";
+        return `<button class="opt ${cls}" data-q="${i}" data-o="${j}" ${answered ? "disabled" : ""}><span class="l">${L[j]}</span><span>${fmt(o)}</span></button>`;
+      }).join("") + `</div>` +
+      (answered ? `<div class="explain"><b>${pick === q.answer ? "Correct." : "Answer: " + L[q.answer] + "."}</b> ${fmt(q.why)}</div>` : "") + `</div>`;
+  }).join("");
+  return `<div class="score"><div><div class="big">${right}/${c.quiz.length}</div><div class="fc-meta">${done} of ${c.quiz.length} answered</div></div><button class="btn" data-act="quiz-reset">Retake quiz</button></div><div class="quiz">${qs}</div>`;
+}
+
+/* search */
+function searchView(term) {
+  const t = term.toLowerCase(), out = [];
+  const textOf = b => [b.text, b.term, b.cap, ...(b.lines || []), ...((b.items || []).flat(2)), ...((b.rows || []).flat())].filter(Boolean).join(" ");
+  for (const c of CHAPTERS) {
+    c.sections.forEach((s, i) => {
+      const txt = plain(s.title + " " + s.blocks.map(textOf).join(" "));
+      const at = txt.toLowerCase().indexOf(t);
+      if (at > -1) {
+        const st = Math.max(0, at - 50), snip = (st ? "…" : "") + txt.slice(st, at + t.length + 70) + "…";
+        const hl = esc(snip).replace(new RegExp(esc(term).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), m => `<mark>${m}</mark>`);
+        out.push(`<button class="result" data-go="${c.id}" data-sec="${slug(c,i)}"><span class="w">Ch ${esc(c.num)} · ${esc(s.title)}</span><span class="s">${hl}</span></button>`);
+      }
+    });
+    c.cards.forEach(k => {
+      if ((k.q + " " + k.a).toLowerCase().includes(t)) out.push(`<button class="result" data-go="${c.id}" data-mode="cards"><span class="w">Ch ${esc(c.num)} · Flashcard</span><span class="s">${fmt(k.q)}</span></button>`);
+    });
+  }
+  return `<header class="chap-head"><span class="eyebrow">Search</span><h2>“${esc(term)}”</h2><div class="stats"><span><b>${out.length}</b> matches across ${CHAPTERS.length} chapter${CHAPTERS.length > 1 ? "s" : ""}</span></div></header>
+    <div class="results">${out.join("") || '<p class="empty">No matches. Try a command name like fuser or a term like inode.</p>'}</div>`;
+}
+
+function render(scrollTo) {
+  const c = chap(state.ch);
+  $("#topTitle").textContent = state.search ? "Search" : `Ch ${c.num} · ${c.title}`;
+  renderNav();
+  let h;
+  if (state.search) h = searchView(state.search);
+  else {
+    const v = { notes: notesView, cheat: cheatView, cards: cardsView, quiz: quizView }[state.mode](c);
+    h = header(c) + `<div class="col" style="gap:${state.mode === "notes" ? 28 : 16}px">${v}</div>`;
+  }
+  $("#view").innerHTML = `<div class="col">${h}</div>`;
+  if (scrollTo) { const el = document.getElementById(scrollTo); if (el) el.scrollIntoView(); }
+}
+
+/* ---------- routing ---------- */
+function setHash(h) { try { history.replaceState(null, "", "#" + h); } catch { location.hash = h; } }
+function fromHash() {
+  const h = location.hash.slice(1);
+  if (!h) return;
+  const c = CHAPTERS.find(x => h === x.id || h.startsWith(x.id + "-"));
+  if (!c) return;
+  state.ch = c.id; state.search = ""; $("#q").value = "";
+  const rest = h.slice(c.id.length + 1);
+  if (["cheat","cards","quiz"].includes(rest)) { state.mode = rest; render(); }
+  else { state.mode = "notes"; render(/^s\d+$/.test(rest) ? h : null); }
+}
+function go(ch, mode, sec) {
+  state.ch = ch; state.mode = mode || "notes"; state.search = ""; $("#q").value = "";
+  setHash(sec || (state.mode === "notes" ? ch : ch + "-" + state.mode));
+  try { store.set("last", state.ch); } catch {}
+  render(sec);
+  if (!sec) window.scrollTo(0, 0);
+  closeMenu();
+}
+
+/* ---------- events ---------- */
+function closeMenu() { $("#rail").classList.remove("open"); $("#scrim").hidden = true; $("#menuBtn").setAttribute("aria-expanded", "false"); }
+const isDesktop = () => matchMedia("(min-width: 881px)").matches;
+function setCollapsed(v) { $(".app").classList.toggle("collapsed", v); store.set("railHidden", v); }
+setCollapsed(store.get("railHidden", false));
+$("#hideBtn").onclick = () => { if (isDesktop()) setCollapsed(true); else closeMenu(); };
+$("#menuBtn").onclick = () => {
+  if (isDesktop()) return setCollapsed(false);
+  $("#rail").classList.add("open"); $("#scrim").hidden = false; $("#menuBtn").setAttribute("aria-expanded", "true");
+};
+$("#scrim").onclick = closeMenu;
+
+$("#nav").addEventListener("click", e => {
+  const b = e.target.closest(".chap-btn");
+  if (b) return go(b.dataset.ch, b.dataset.ch === state.ch ? state.mode : "notes");
+  const a = e.target.closest("[data-sec]");
+  if (a) { e.preventDefault(); setHash(a.dataset.sec); document.getElementById(a.dataset.sec)?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); closeMenu(); }
+});
+
+let qTimer;
+$("#q").addEventListener("input", e => {
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => { state.search = e.target.value.trim(); render(); }, 120);
+});
+
+$("#view").addEventListener("click", e => {
+  const c = chap(state.ch);
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.dataset.mode && !t.dataset.go) return go(c.id, t.dataset.mode);
+  if (t.dataset.go) return go(t.dataset.go, t.dataset.mode, t.dataset.sec);
+  if (t.dataset.tag) { cheatTag = t.dataset.tag; return render(); }
+  if (t.id === "card") { fc[c.id].flipped = !fc[c.id].flipped; t.classList.toggle("flipped"); return; }
+  if (t.dataset.q !== undefined) { qz[c.id][t.dataset.q] = +t.dataset.o; const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  const act = t.dataset.act; if (!act) return;
+  if (act === "quiz-reset") { qz[c.id] = {}; render(); window.scrollTo(0, 0); return; }
+  fcAction(c, act);
+});
+
+function fcAction(c, act) {
+  const s = fcSession(c), d = deck(c, s);
+  const known = new Set(store.get("known-" + c.id, []));
+  if (act === "next") { s.pos = (s.pos + 1) % Math.max(d.length, 1); s.flipped = false; }
+  else if (act === "prev") { s.pos = (s.pos - 1 + d.length) % Math.max(d.length, 1); s.flipped = false; }
+  else if (act === "shuffle") { for (let i = s.order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [s.order[i], s.order[j]] = [s.order[j], s.order[i]]; } s.pos = 0; s.flipped = false; }
+  else if (act === "toggle-unknown") { s.onlyUnknown = !s.onlyUnknown; s.pos = 0; s.flipped = false; }
+  else if (act === "reset-known") { store.set("known-" + c.id, []); s.onlyUnknown = false; s.pos = 0; }
+  else if (act === "know" || act === "again") {
+    const idx = d[s.pos];
+    act === "know" ? known.add(idx) : known.delete(idx);
+    store.set("known-" + c.id, [...known]);
+    s.flipped = false;
+    if (!(act === "know" && s.onlyUnknown)) s.pos = (s.pos + 1) % Math.max(d.length, 1);
+  }
+  render();
+}
+
+document.addEventListener("keydown", e => {
+  if (state.mode !== "cards" || state.search || e.target.matches("input, textarea")) return;
+  const c = chap(state.ch);
+  if (e.key === " " && !e.target.closest("button:not(#card)")) { e.preventDefault(); const k = $("#card"); if (k) { fc[c.id].flipped = !fc[c.id].flipped; k.classList.toggle("flipped"); } }
+  else if (e.key === "ArrowRight") fcAction(c, "next");
+  else if (e.key === "ArrowLeft") fcAction(c, "prev");
+});
+window.addEventListener("hashchange", fromHash);
+
+/* ---------- boot ---------- */
+if (location.hash.length > 1) fromHash();
+else { const last = store.get("last", null); if (last && CHAPTERS.some(x => x.id === last)) state.ch = last; render(); }
+</script>
+
+</body></html>
